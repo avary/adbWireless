@@ -9,6 +9,8 @@
 	<string name="footer_text_3">And you can use ADB as if connected by USB</string>
 	<string name="footer_text_off">adbWireless is off</string>
 
+	<string name="tether_text">It seems you are using tethering to connect. Find out the IP of the gateway on your computer (via route -n) and connect to it.\n\nExample: adb connect 192.168.43.1:</string>
+
 	<string name="button_close">Close</string>
 	<string name="button_exit">Exit</string>
 	<string name="button_continue">Continue</string>
@@ -28,6 +30,7 @@
 	<string name="about">adbWireless enable ADB wireless connection to connect to the phone as if connected by USB.\n\nThanks to Skywriter to contribute.</string>
 
 	<string name="noti_text">Connect to </string>
+	<string name="tethering_noti_text">Tethering: Connect to gateway IP and Port </string>
 	<string name="noti_title">USB debugging connected</string>
 
 	<string name="settings_title">Preferences</string>

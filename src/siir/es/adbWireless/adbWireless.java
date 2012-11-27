@@ -21,6 +21,7 @@ package siir.es.adbWireless;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -228,7 +229,12 @@ public class adbWireless extends Activity {
 		if (mState) {
 			tv_footer_1.setText(R.string.footer_text_1);
 			try {
-				tv_footer_2.setText("adb connect " + getWifiIp(this) + ":" + PORT);
+				String ip = getWifiIp(this);
+				String text = "";
+				if (ip == null)
+					tv_footer_2.setText(getString(R.string.tether_text) + PORT);
+				else
+					tv_footer_2.setText("adb connect " + getWifiIp(this) + ":" + PORT);
 			} catch (Exception e) {
 				tv_footer_2.setText("adb connect unknowip:" + PORT);
 			}
@@ -262,7 +268,11 @@ public class adbWireless extends Activity {
 			AppWidgetManager.getInstance(context).updateAppWidget(cn, remoteViews);
 
 			if (prefsNoti(context)) {
-				showNotification(context, R.drawable.stat_sys_adb, context.getString(R.string.noti_text)+ " " + getWifiIp(context) + ":" + adbWireless.PORT);
+				String ip = getWifiIp(context);
+				if (ip == null)
+					showNotification(context, R.drawable.stat_sys_adb, context.getString(R.string.tethering_noti_text) + adbWireless.PORT);
+				else
+					showNotification(context, R.drawable.stat_sys_adb, context.getString(R.string.noti_text)+ " " + ip + ":" + adbWireless.PORT);
 			}
 		} catch (Exception e) {return false;}
 		return true;
@@ -380,7 +390,11 @@ public class adbWireless extends Activity {
 	public static String getWifiIp(Context context) {
 		WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		int ip = mWifiManager.getConnectionInfo().getIpAddress();
-		return (ip & 0xFF) + "." + ((ip >> 8) & 0xFF) + "." + ((ip >> 16) & 0xFF) + "." + ((ip >> 24) & 0xFF);
+		if (ip == 0) {
+			return null;
+		} else {
+			return (ip & 0xFF) + "." + ((ip >> 8) & 0xFF) + "." + ((ip >> 16) & 0xFF) + "." + ((ip >> 24) & 0xFF);
+		}
 	}
 
 	public static void enableWiFi(Context context, boolean enable) {
@@ -394,14 +408,26 @@ public class adbWireless extends Activity {
 	}
 
 	public static boolean checkWifiState(Context context) {
+		WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+		// check if Wifi is on
 		try {
-			WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 			WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
-			if (!mWifiManager.isWifiEnabled() || wifiInfo.getSSID() == null) {
-				return false;
+			if (mWifiManager.isWifiEnabled() && wifiInfo.getSSID() != null) {
+				return true;
 			}
 
-			return true;
+		} catch (Exception e) {return false;}
+		
+		// check if tethering is on
+		try {
+			Method[] wmMethods = mWifiManager.getClass().getDeclaredMethods();
+			for(Method method: wmMethods)
+				if(method.getName().equals("isWifiApEnabled")) {
+					boolean isOn = (Boolean) method.invoke(mWifiManager);
+					return isOn;
+				}
+			return false;
 		} catch (Exception e) {return false;}
 	}
 
