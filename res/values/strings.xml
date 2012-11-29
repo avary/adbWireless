@@ -9,7 +9,7 @@
 	<string name="footer_text_3">And you can use ADB as if connected by USB</string>
 	<string name="footer_text_off">adbWireless is off</string>
 
-	<string name="tether_text">It seems you are using tethering to connect. Find out the IP of the gateway on your computer (via route -n) and connect to it.\n\nExample: adb connect 192.168.43.1:</string>
+	<string name="tether_text">It seems you are using tethering to connect. Find out the IP of the gateway on your computer (via route command) and connect to it.\n\nExample: adb connect 192.168.43.1:</string>
 
 	<string name="button_close">Close</string>
 	<string name="button_exit">Exit</string>
