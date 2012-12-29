@@ -15,8 +15,8 @@
     <string name="no_root">Ops! Lo sentimos pero tu kernel no tiene todas las características necesarias para el funcionamiento de esta aplicación, es necesario un teléfono rooteado.</string>
     <string name="no_wifi_title">No Wireless!</string>
     <string name="no_wifi">Ops! El WiFi está apagado, necesitas el WiFi activo para utilizar adbWireless.</string>
-    <string name="menu_prefs">Preferencias</string>
-    <string name="menu_about">Acerca de&#8230;</string>
+    <string name="menu_prefs">Ajustes</string>
+    <string name="menu_about">Información</string>
     <string name="menu_exit">Salir</string>
     <string name="about">adbWireless habilita la conexión inalámbrica de ADB para conectarse al teléfono como si estuviera conectado por USB.\n\nDesarrollado por MrSiir (mrsiir@gmail.com)\n\nCódigo fuente:\nhttps://github.com/MrSiir/adbWireless\n\nHan contribuido: HandlerExploit y Skywriter</string>
     <string name="noti_text">Conéctate a </string>
@@ -28,6 +28,8 @@
     <string name="exit_info">Para cerrar la aplicación utiliza el menú Salir. Para seguir trabajando utiliza el botón de inicio.</string>
 
     <!-- Settings -->
+	<string name="onboot">Auto Start</string>
+    <string name="server_onboot">Arranca automáticamente cuando se reinicia el teléfono</string>
     <string name="vibrate">Vibrar</string>
     <string name="server_vibrate">Cuando la conexión se activa</string>
     <string name="sound">Sonido</string>

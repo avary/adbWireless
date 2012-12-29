@@ -22,8 +22,10 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -37,6 +39,11 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 public class Utils {
+
+	public static NotificationManager mNotificationManager;
+
+	public static final int START_NOTIFICATION_ID = 1;
+	public static final int ACTIVITY_SETTINGS = 2;
 
 	public static void saveWiFiState(Context context, boolean wifiState) {
 		SharedPreferences settings = context.getSharedPreferences("wireless", 0);
@@ -66,23 +73,29 @@ public class Utils {
 
 	public static boolean adbStart(Context context) {
 		try {
-			setProp("service.adb.tcp.port", adbWireless.PORT);
-			if (isProcessRunning("adbd")) {
-				runRootCommand("stop adbd");
+			Utils.setProp("service.adb.tcp.port", adbWireless.PORT);
+			try {
+				if (Utils.isProcessRunning("adbd")) {
+					Utils.runRootCommand("stop adbd");
+				}
+			} catch (Exception e) {
 			}
-			runRootCommand("start adbd");
-			adbWireless.mState = true;
+			Utils.runRootCommand("start adbd");
+			try {
+				adbWireless.mState = true;
+			} catch (Exception e) {
+			}
 			SharedPreferences settings = context.getSharedPreferences("wireless", 0);
 			SharedPreferences.Editor editor = settings.edit();
-			editor.putBoolean("mState", adbWireless.mState);
+			editor.putBoolean("mState", true);
 			editor.commit();
 
 			adbWireless.remoteViews.setImageViewResource(R.id.widgetButton, R.drawable.widgetoff);
 			ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
 			AppWidgetManager.getInstance(context).updateAppWidget(cn, adbWireless.remoteViews);
 
-			if (prefsNoti(context)) {
-				showNotification(context, R.drawable.ic_stat_adbwireless, context.getString(R.string.noti_text) + " " + getWifiIp(context));
+			if (Utils.prefsNoti(context)) {
+				Utils.showNotification(context, R.drawable.ic_stat_adbwireless, context.getString(R.string.noti_text) + " " + Utils.getWifiIp(context));
 			}
 		} catch (Exception e) {
 			return false;
@@ -98,12 +111,14 @@ public class Utils {
 			adbWireless.mState = false;
 			SharedPreferences settings = context.getSharedPreferences("wireless", 0);
 			SharedPreferences.Editor editor = settings.edit();
-			editor.putBoolean("mState", adbWireless.mState);
+			editor.putBoolean("mState", false);
 			editor.commit();
 			adbWireless.remoteViews.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
 			ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
 			AppWidgetManager.getInstance(context).updateAppWidget(cn, adbWireless.remoteViews);
-			adbWireless.mNotificationManager.cancelAll();
+			if (Utils.mNotificationManager != null) {
+				Utils.mNotificationManager.cancelAll();
+			}
 		} catch (Exception e) {
 			return false;
 		}
@@ -179,6 +194,8 @@ public class Utils {
 	}
 
 	public static boolean setProp(String property, String value) {
+		return runRootCommand("setprop " + property + " " + value);
+		/*
 		Process process = null;
 		DataOutputStream os = null;
 		try {
@@ -200,6 +217,7 @@ public class Utils {
 			}
 		}
 		return true;
+		*/
 	}
 
 	public static String getWifiIp(Context context) {
@@ -249,7 +267,19 @@ public class Utils {
 		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent intent = PendingIntent.getActivity(context, 0, notifyIntent, 0);
 		notifyDetails.setLatestEventInfo(context, context.getResources().getString(R.string.noti_title), text, intent);
-		adbWireless.mNotificationManager.notify(adbWireless.START_NOTIFICATION_ID, notifyDetails);
+
+		if (Utils.mNotificationManager != null) {
+			Utils.mNotificationManager.notify(Utils.START_NOTIFICATION_ID, notifyDetails);
+		} else {
+			Utils.mNotificationManager = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
+		}
+
+		Utils.mNotificationManager.notify(Utils.START_NOTIFICATION_ID, notifyDetails);
+	}
+
+	public static boolean prefsOnBoot(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getBoolean(context.getResources().getString(R.string.pref_onboot_key), false);
 	}
 
 	public static boolean prefsVibrate(Context context) {
@@ -279,7 +309,7 @@ public class Utils {
 
 	public static boolean prefsWiFiOff(Context context) {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		return pref.getBoolean(context.getResources().getString(R.string.pref_wifi_off_key), true);
+		return pref.getBoolean(context.getResources().getString(R.string.pref_wifi_off_key), false);
 
 	}
 

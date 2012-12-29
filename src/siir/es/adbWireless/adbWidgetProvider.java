@@ -30,48 +30,48 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 public class adbWidgetProvider extends AppWidgetProvider {
-	
+
 	private static String ACTION_CLICK = "siir.es.adbwireless.widget_update";
-	private RemoteViews views = new RemoteViews("siir.es.adbWireless",  R.layout.adb_appwidget);  
-	
+	private RemoteViews views = new RemoteViews("siir.es.adbWireless", R.layout.adb_appwidget);
+
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
-		
+
 		SharedPreferences settings = context.getSharedPreferences("wireless", 0);
-    	adbWireless.mState = settings.getBoolean("mState", false);
-    	adbWireless.wifiState = settings.getBoolean("wifiState", false);
-    	
-        final int N = appWidgetIds.length;
-        for (int i=0; i<N; i++) {
-            int appWidgetId = appWidgetIds[i];
-            Intent intent = new Intent(context, adbWidgetProvider.class);
-            intent.setAction(ACTION_CLICK);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-            views.setOnClickPendingIntent(R.id.widgetButton, pendingIntent);
-            if (adbWireless.mState) {
-            	views.setImageViewResource(R.id.widgetButton, R.drawable.widgetoff);
+		adbWireless.mState = settings.getBoolean("mState", false);
+		adbWireless.wifiState = settings.getBoolean("wifiState", false);
+
+		final int N = appWidgetIds.length;
+		for (int i = 0; i < N; i++) {
+			int appWidgetId = appWidgetIds[i];
+			Intent intent = new Intent(context, adbWidgetProvider.class);
+			intent.setAction(ACTION_CLICK);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+			views.setOnClickPendingIntent(R.id.widgetButton, pendingIntent);
+			if (adbWireless.mState) {
+				views.setImageViewResource(R.id.widgetButton, R.drawable.widgetoff);
 			} else {
 				views.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
 			}
-            appWidgetManager.updateAppWidget(appWidgetId, views);
-        }
-    }
-	
+			appWidgetManager.updateAppWidget(appWidgetId, views);
+		}
+	}
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
-	    super.onReceive(context, intent);
-	    if (intent.getAction().equals(ACTION_CLICK)) {
-	    	
-	    	if(!Utils.hasRootPermission()) {
-	    		Toast.makeText(context, R.string.no_root, Toast.LENGTH_LONG).show();
-	    		return;
-	    	}
-	    	
+		super.onReceive(context, intent);
+		if (intent.getAction().equals(ACTION_CLICK)) {
+
+			if (!Utils.hasRootPermission()) {
+				Toast.makeText(context, R.string.no_root, Toast.LENGTH_LONG).show();
+				return;
+			}
+
 			if (!Utils.checkWifiState(context)) {
 				adbWireless.wifiState = false;
 				Utils.saveWiFiState(context, adbWireless.wifiState);
-				
+
 				if (Utils.prefsWiFiOn(context)) {
 					Utils.enableWiFi(context, true);
 				} else {
@@ -82,32 +82,32 @@ public class adbWidgetProvider extends AppWidgetProvider {
 				adbWireless.wifiState = true;
 				Utils.saveWiFiState(context, adbWireless.wifiState);
 			}
-	    	
-	    	SharedPreferences settings = context.getSharedPreferences("wireless", 0);
-	    	adbWireless.mState = settings.getBoolean("mState", false);
-	    	adbWireless.wifiState = settings.getBoolean("wifiState", false);
-	    	
-	    	Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+			SharedPreferences settings = context.getSharedPreferences("wireless", 0);
+			adbWireless.mState = settings.getBoolean("mState", false);
+			adbWireless.wifiState = settings.getBoolean("wifiState", false);
+
+			Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 			if (Utils.prefsHaptic(context)) {
 				vib.vibrate(45);
 			}
-			
+
 			try {
 				if (adbWireless.mState) {
-		            views.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
-		            ComponentName cn = new ComponentName(context, adbWidgetProvider.class);  
-                    AppWidgetManager.getInstance(context).updateAppWidget(cn, views);
-                    Utils.adbStop(context);
+					views.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
+					ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
+					AppWidgetManager.getInstance(context).updateAppWidget(cn, views);
+					Utils.adbStop(context);
 				} else {
-		            views.setImageViewResource(R.id.widgetButton, R.drawable.widgetoff);
-		            ComponentName cn = new ComponentName(context, adbWidgetProvider.class);  
-                    AppWidgetManager.getInstance(context).updateAppWidget(cn, views);
-                    Toast.makeText(context, context.getString(R.string.widget_start) + " " + Utils.getWifiIp(context) + ":" + adbWireless.PORT , Toast.LENGTH_LONG).show();
-                    Utils.adbStart(context);
+					views.setImageViewResource(R.id.widgetButton, R.drawable.widgetoff);
+					ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
+					AppWidgetManager.getInstance(context).updateAppWidget(cn, views);
+					Toast.makeText(context, context.getString(R.string.widget_start) + " " + Utils.getWifiIp(context), Toast.LENGTH_LONG).show();
+					Utils.adbStart(context);
 				}
 
 			} catch (Exception e) {
 			}
-	    }
+		}
 	}
 }

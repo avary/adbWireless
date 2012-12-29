@@ -4,6 +4,11 @@
 
     <PreferenceCategory android:title="@string/settings_title" >
         <CheckBoxPreference
+            android:defaultValue="@string/default_onboot"
+            android:key="@string/pref_onboot_key"
+            android:summary="@string/server_onboot"
+            android:title="@string/onboot" />
+        <CheckBoxPreference
             android:defaultValue="@string/default_vibrate"
             android:key="@string/pref_vibrate_key"
             android:summary="@string/server_vibrate"

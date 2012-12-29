@@ -40,10 +40,7 @@ import android.widget.Toast;
 
 public class adbWireless extends Activity {
 
-	public static final String MSG_TAG = "ADBWIRELESS";
 	public static final String PORT = "5555";
-
-	public static NotificationManager mNotificationManager;
 
 	public static boolean mState = false;
 	public static boolean wifiState;
@@ -53,15 +50,12 @@ public class adbWireless extends Activity {
 	private TextView tv_footer_3;
 	private ImageView iv_button;
 
-	public static final int START_NOTIFICATION_ID = 1;
-	public static final int ACTIVITY_SETTINGS = 2;
-
 	public static RemoteViews remoteViews = new RemoteViews("siir.es.adbWireless", R.layout.adb_appwidget);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.main);
 
 		this.iv_button = (ImageView) findViewById(R.id.iv_button);
@@ -69,7 +63,9 @@ public class adbWireless extends Activity {
 		this.tv_footer_2 = (TextView) findViewById(R.id.tv_footer_2);
 		this.tv_footer_3 = (TextView) findViewById(R.id.tv_footer_3);
 
-		adbWireless.mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		if (Utils.mNotificationManager == null) {
+			Utils.mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		}
 
 		if (!Utils.hasRootPermission()) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -120,30 +116,30 @@ public class adbWireless extends Activity {
 			}
 		});
 	}
-	
+
 	@Override
 	protected void onResume() {
+		super.onResume();
 		SharedPreferences settings = getSharedPreferences("wireless", 0);
 		mState = settings.getBoolean("mState", false);
 		wifiState = settings.getBoolean("wifiState", false);
 		updateState();
-		super.onResume();
 	}
 
 	@Override
 	protected void onDestroy() {
 		try {
-			if (Utils.prefsWiFiOff(this) && !wifiState && Utils.checkWifiState(this)) {
-				Utils.enableWiFi(this, false);
-			}
-		} catch (Exception e) {
-		}
-		try {
 			Utils.adbStop(this);
 		} catch (Exception e) {
 		}
 		try {
-			mNotificationManager.cancelAll();
+			Utils.mNotificationManager.cancelAll();
+		} catch (Exception e) {
+		}
+		try {
+			if (Utils.prefsWiFiOff(this) && !wifiState && Utils.checkWifiState(this)) {
+				Utils.enableWiFi(this, false);
+			}
 		} catch (Exception e) {
 		}
 		super.onDestroy();
@@ -160,7 +156,7 @@ public class adbWireless extends Activity {
 		switch (item.getItemId()) {
 		case R.id.menu_prefs:
 			Intent i = new Intent(this, ManagePreferences.class);
-			startActivityForResult(i, ACTIVITY_SETTINGS);
+			startActivityForResult(i, Utils.ACTIVITY_SETTINGS);
 			break;
 		case R.id.menu_about:
 			this.showHelpDialog();
@@ -173,7 +169,7 @@ public class adbWireless extends Activity {
 	}
 
 	/**
-	 * onBackPressed() requires Android 2.0, API 5 (ECLAIR) 
+	 * onBackPressed() requires Android 2.0, API 5 (ECLAIR)
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -185,12 +181,12 @@ public class adbWireless extends Activity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-	    super.onConfigurationChanged(newConfig);
+		super.onConfigurationChanged(newConfig);
 	}
-	
+
 	private void updateState() {
 		if (mState) {
 			tv_footer_1.setText(R.string.footer_text_1);
