@@ -73,14 +73,16 @@ public class Utils {
 
 	public static boolean adbStart(Context context) {
 		try {
-			Utils.setProp("service.adb.tcp.port", adbWireless.PORT);
-			try {
-				if (Utils.isProcessRunning("adbd")) {
-					Utils.runRootCommand("stop adbd");
+			if (!adbWireless.USB_DEBUG) {
+				Utils.setProp("service.adb.tcp.port", adbWireless.PORT);
+				try {
+					if (Utils.isProcessRunning("adbd")) {
+						Utils.runRootCommand("stop adbd");
+					}
+				} catch (Exception e) {
 				}
-			} catch (Exception e) {
+				Utils.runRootCommand("start adbd");
 			}
-			Utils.runRootCommand("start adbd");
 			try {
 				adbWireless.mState = true;
 			} catch (Exception e) {
@@ -94,6 +96,11 @@ public class Utils {
 			ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
 			AppWidgetManager.getInstance(context).updateAppWidget(cn, adbWireless.remoteViews);
 
+			// Try to auto connect
+			if (Utils.prefsAutoCon(context)) {
+				Utils.autoConnect(context, "c");
+			}
+
 			if (Utils.prefsNoti(context)) {
 				Utils.showNotification(context, R.drawable.ic_stat_adbwireless, context.getString(R.string.noti_text) + " " + Utils.getWifiIp(context));
 			}
@@ -105,17 +112,29 @@ public class Utils {
 
 	public static boolean adbStop(Context context) throws Exception {
 		try {
-			setProp("service.adb.tcp.port", "-1");
-			runRootCommand("stop adbd");
-			runRootCommand("start adbd");
+			if (!adbWireless.USB_DEBUG) {
+				if (adbWireless.mState) {
+					setProp("service.adb.tcp.port", "-1");
+					runRootCommand("stop adbd");
+					runRootCommand("start adbd");
+				}
+			}
 			adbWireless.mState = false;
+
 			SharedPreferences settings = context.getSharedPreferences("wireless", 0);
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("mState", false);
 			editor.commit();
+
 			adbWireless.remoteViews.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
 			ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
 			AppWidgetManager.getInstance(context).updateAppWidget(cn, adbWireless.remoteViews);
+
+			// Try to auto disconnect
+			if (Utils.prefsAutoCon(context)) {
+				Utils.autoConnect(context, "d");
+			}
+
 			if (Utils.mNotificationManager != null) {
 				Utils.mNotificationManager.cancelAll();
 			}
@@ -123,6 +142,25 @@ public class Utils {
 			return false;
 		}
 		return true;
+
+	}
+
+	public static void autoConnect(Context context, String mode) {
+		String autoConIP = Utils.prefsAutoConIP(context);
+		String autoConPort = Utils.prefsAutoConPort(context);
+
+		if (autoConIP.trim().equals("") || autoConPort.trim().equals("")) {
+			Toast.makeText(context, R.string.autcon_incomplete, Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		String urlRequest = "http://" + autoConIP + ":" + autoConPort + "/" + mode + "/" + Utils.getWifiIp(context);
+
+		try {
+			new AutoConnectTask(urlRequest).execute();
+		} catch (Exception e) {
+		}
+
 	}
 
 	public static boolean isProcessRunning(String processName) throws Exception {
@@ -195,29 +233,6 @@ public class Utils {
 
 	public static boolean setProp(String property, String value) {
 		return runRootCommand("setprop " + property + " " + value);
-		/*
-		Process process = null;
-		DataOutputStream os = null;
-		try {
-			process = Runtime.getRuntime().exec("su");
-			os = new DataOutputStream(process.getOutputStream());
-			os.writeBytes("setprop " + property + " " + value + "\n");
-			os.writeBytes("exit\n");
-			os.flush();
-			process.waitFor();
-		} catch (Exception e) {
-			return false;
-		} finally {
-			try {
-				if (os != null) {
-					os.close();
-				}
-				process.destroy();
-			} catch (Exception e) {
-			}
-		}
-		return true;
-		*/
 	}
 
 	public static String getWifiIp(Context context) {
@@ -311,6 +326,21 @@ public class Utils {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		return pref.getBoolean(context.getResources().getString(R.string.pref_wifi_off_key), false);
 
+	}
+
+	public static boolean prefsAutoCon(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getBoolean(context.getResources().getString(R.string.pref_autocon_key), false);
+	}
+
+	public static String prefsAutoConIP(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getString(context.getResources().getString(R.string.pref_autoconip_key), "");
+	}
+
+	public static String prefsAutoConPort(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getString(context.getResources().getString(R.string.pref_autoconport_key), "");
 	}
 
 }

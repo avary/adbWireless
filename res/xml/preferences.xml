@@ -28,6 +28,28 @@
             android:key="@string/pref_haptic_key"
             android:summary="@string/server_haptic"
             android:title="@string/haptic" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_title_autcon" >
+        <CheckBoxPreference
+            android:defaultValue="@string/default_autocon"
+            android:key="@string/pref_autocon_key"
+            android:summary="@string/server_autocon"
+            android:title="@string/autocon" />
+
+        <EditTextPreference
+            android:defaultValue="@string/default_autoconip"
+            android:dependency="@string/pref_autocon_key"
+            android:key="@string/pref_autoconip_key"
+            android:summary="@string/server_autoconip"
+            android:title="@string/autoconip" />
+        <EditTextPreference
+            android:defaultValue="@string/default_autoconport"
+            android:dependency="@string/pref_autocon_key"
+            android:key="@string/pref_autoconport_key"
+            android:summary="@string/server_autoconport"
+            android:title="@string/autoconport" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_title_wifi" >
         <CheckBoxPreference
             android:defaultValue="@string/default_wifi_on"
             android:key="@string/pref_wifi_on_key"

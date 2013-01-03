@@ -18,7 +18,7 @@
     <string name="menu_prefs">Settings</string>
     <string name="menu_about">Info</string>
     <string name="menu_exit">Exit</string>
-    <string name="about">adbWireless enable ADB wireless connection to connect to the phone as if connected by USB.\n\nDeveloped by MrSiir (mrsiir@gmail.com)\n\nSource code:\nhttps://github.com/MrSiir/adbWireless\n\nContributors: HandlerExploit y Skywriter</string>
+    <string name="about">adbWireless enable ADB wireless connection to connect to the phone as if connected by USB.\n\nDeveloped by MrSiir (mrsiir@gmail.com)\n\nadbWirelessService:\nhttps://github.com/MrSiir/adbWireless/server\n\nSource code:\nhttps://github.com/MrSiir/adbWireless\n\nContributors: HandlerExploit y Skywriter</string>
     <string name="noti_text">Connect to </string>
     <string name="noti_title">USB debugging connected</string>
     <string name="settings_title">Preferences</string>
@@ -61,5 +61,23 @@
     <string name="pref_wifi_on_key">key_wifi_on</string>
     <string name="pref_wifi_off_key">key_wifi_off</string>
     <string name="pref_onboot_key">key_onboot</string>
+
+    <!-- Start 1.5.3 -->
+    <string name="autcon_incomplete">You must configure the IP and port to use auto connection</string>
+    <string name="settings_title_autcon">Auto connection</string>
+    <string name="settings_title_wifi">WiFi</string>
+    <string name="autocon">Auto connection</string>
+    <string name="server_autocon">Connects to your computer automatically when you start ADB</string>
+    <string name="default_autocon">false</string>
+    <string name="pref_autocon_key">key_autocon</string>
+    <string name="autoconip">Computer host or IP</string>
+    <string name="server_autoconip">Address of the computer, requires adbWirelessService</string>
+    <string name="default_autoconip"></string>
+    <string name="pref_autoconip_key">key_autoconip</string>
+    <string name="autoconport">Computer port</string>
+    <string name="server_autoconport">The default is port 8555</string>
+    <string name="default_autoconport">8555</string>
+    <string name="pref_autoconport_key">key_autoconport</string>
+    <!-- End 1.5.3 -->
 
 </resources>

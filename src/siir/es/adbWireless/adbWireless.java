@@ -41,6 +41,7 @@ import android.widget.Toast;
 public class adbWireless extends Activity {
 
 	public static final String PORT = "5555";
+	public static final boolean USB_DEBUG = false;
 
 	public static boolean mState = false;
 	public static boolean wifiState;
@@ -49,6 +50,8 @@ public class adbWireless extends Activity {
 	private TextView tv_footer_2;
 	private TextView tv_footer_3;
 	private ImageView iv_button;
+
+	private Toast toastBack;
 
 	public static RemoteViews remoteViews = new RemoteViews("siir.es.adbWireless", R.layout.adb_appwidget);
 
@@ -176,7 +179,10 @@ public class adbWireless extends Activity {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			// Do nothing, force them to hit the home button so it does not
 			// close the application.
-			Toast.makeText(this, R.string.exit_info, Toast.LENGTH_LONG).show();
+			if (toastBack == null || toastBack.getView().getWindowVisibility() != View.VISIBLE) {
+				toastBack = Toast.makeText(this, R.string.exit_info, Toast.LENGTH_LONG);
+				toastBack.show();
+			}
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -219,4 +225,5 @@ public class adbWireless extends Activity {
 		builder.setTitle(R.string.app_name);
 		builder.show();
 	}
+
 }
