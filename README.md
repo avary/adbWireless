@@ -9,8 +9,8 @@ This App is for developers, if you don't know that it serves don't install!
 Versions
 ----------
 * **1.5.3**
- * Added option for `Auto connect` to computer, see adbWireless Service
- 
+ * Added option for `Auto connect` to computer, see [adbWireless Service](https://github.com/MrSiir/adbWireless#adbwireless-service)
+
 * **1.5.2**
  * Bug fixed, pressing the back button sometimes the message does not disappear ever (Thanks to Sullivan by notify)
 
