@@ -18,7 +18,7 @@
     <string name="menu_prefs">Settings</string>
     <string name="menu_about">Info</string>
     <string name="menu_exit">Exit</string>
-    <string name="about">adbWireless enable ADB wireless connection to connect to the phone as if connected by USB.\n\nDeveloped by MrSiir (mrsiir@gmail.com)\n\nadbWirelessService:\nhttps://github.com/MrSiir/adbWireless/server\n\nSource code:\nhttps://github.com/MrSiir/adbWireless\n\nContributors: HandlerExploit y Skywriter</string>
+    <string name="about">adbWireless enable ADB wireless connection to connect to the phone as if connected by USB.\n\nDeveloped by MrSiir (mrsiir@gmail.com)\n\nadbWirelessService:\nhttps://github.com/MrSiir/adbWireless/tree/master/server\n\nSource code:\nhttps://github.com/MrSiir/adbWireless\n\nContributors: HandlerExploit y Skywriter</string>
     <string name="noti_text">Connect to </string>
     <string name="noti_title">USB debugging connected</string>
     <string name="settings_title">Preferences</string>

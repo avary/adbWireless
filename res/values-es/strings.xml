@@ -18,7 +18,7 @@
     <string name="menu_prefs">Ajustes</string>
     <string name="menu_about">Información</string>
     <string name="menu_exit">Salir</string>
-    <string name="about">adbWireless habilita la conexión inalámbrica de ADB para conectarse al teléfono como si estuviera conectado por USB.\n\nDesarrollado por MrSiir (mrsiir@gmail.com)\n\nadbWirelessService:\nhttps://github.com/MrSiir/adbWireless/server\n\nCódigo fuente:\nhttps://github.com/MrSiir/adbWireless\n\nHan contribuido: HandlerExploit y Skywriter</string>
+    <string name="about">adbWireless habilita la conexión inalámbrica de ADB para conectarse al teléfono como si estuviera conectado por USB.\n\nDesarrollado por MrSiir (mrsiir@gmail.com)\n\nadbWirelessService:\nhttps://github.com/MrSiir/adbWireless/tree/master/server\n\nCódigo fuente:\nhttps://github.com/MrSiir/adbWireless\n\nHan contribuido: HandlerExploit y Skywriter</string>
     <string name="noti_text">Conéctate a </string>
     <string name="noti_title">Depuración de USB wireless activada</string>
     <string name="settings_title">Preferencias</string>
@@ -42,7 +42,7 @@
     <string name="server_wifi_on">Enciende el WiFi cuando la aplicación se inicia</string>
     <string name="wifi_off">WiFi auto off</string>
     <string name="server_wifi_off">Apaga el WiFi al salir aplicación si estaba apagado cuando la app se inicio</string>
-    <string name="widget_start">adbWireless encendido!\nConectate a</string>
+    <string name="widget_start">adbWireless encendido!\nConéctate a</string>
 
     <!-- Defaults -->
     <string name="default_vibrate">true</string>
@@ -65,7 +65,7 @@
     <string name="settings_title_autcon">Auto conexión</string>
     <string name="settings_title_wifi">WiFi</string>
     <string name="autocon">Auto conexión</string>
-    <string name="server_autocon">Conecta automaticamente al ordenador cuando se inicia ADB</string>
+    <string name="server_autocon">Conecta automáticamente al ordenador cuando se inicia ADB</string>
     <string name="default_autocon">false</string>
     <string name="pref_autocon_key">key_autocon</string>
     <string name="autoconip">Ordenador host o IP</string>
