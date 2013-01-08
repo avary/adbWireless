@@ -8,6 +8,10 @@ This App is for developers, if you don't know that it serves don't install!
 
 Versions
 ----------
+* **1.5.4**
+ * Color buttons: "gray = off" and "green = on", when you see the gray button adb is off, when you see the green button adb is on, more simple
+ * Added option: Screen always on (be careful with battery consumption)
+ 
 * **1.5.3**
  * Added option for `Auto connect` to computer, see [adbWireless Service](https://github.com/MrSiir/adbWireless#adbwireless-service)
 

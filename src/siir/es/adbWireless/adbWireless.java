@@ -130,6 +130,12 @@ public class adbWireless extends Activity {
 	}
 
 	@Override
+	protected void onPause() {
+		super.onPause();
+		Debug.log("onPause()");
+	}
+
+	@Override
 	protected void onDestroy() {
 		try {
 			Utils.adbStop(this);
@@ -139,6 +145,10 @@ public class adbWireless extends Activity {
 			Utils.mNotificationManager.cancelAll();
 		} catch (Exception e) {
 		}
+		/*
+		 * try { if(Utils.mWakeLock != null) { Utils.mWakeLock.release(); } }
+		 * catch (Exception e) { }
+		 */
 		try {
 			if (Utils.prefsWiFiOff(this) && !wifiState && Utils.checkWifiState(this)) {
 				Utils.enableWiFi(this, false);
@@ -203,13 +213,12 @@ public class adbWireless extends Activity {
 			}
 			tv_footer_2.setVisibility(View.VISIBLE);
 			tv_footer_3.setVisibility(View.VISIBLE);
-			iv_button.setImageResource(R.drawable.bt_off);
-
+			iv_button.setImageResource(R.drawable.bt_on);
 		} else {
 			tv_footer_1.setText(R.string.footer_text_off);
 			tv_footer_2.setVisibility(View.INVISIBLE);
 			tv_footer_3.setVisibility(View.INVISIBLE);
-			iv_button.setImageResource(R.drawable.bt_on);
+			iv_button.setImageResource(R.drawable.bt_off);
 		}
 	}
 

@@ -79,5 +79,12 @@
     <string name="default_autoconport">8555</string>
     <string name="pref_autoconport_key">key_autoconport</string>
     <!-- End 1.5.3 -->
+    
+    <!-- Start 1.5.4 -->
+    <string name="screenon">Screen always on</string>
+    <string name="server_screenon">The screen never enter sleep mode</string>
+    <string name="default_screenon">false</string>
+    <string name="pref_screenon_key">key_screenon</string>
+    <!-- End 1.5.4 -->
 
 </resources>

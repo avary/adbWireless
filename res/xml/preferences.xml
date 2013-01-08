@@ -9,6 +9,11 @@
             android:summary="@string/server_onboot"
             android:title="@string/onboot" />
         <CheckBoxPreference
+            android:defaultValue="@string/default_screenon"
+            android:key="@string/pref_screenon_key"
+            android:summary="@string/server_screenon"
+            android:title="@string/screenon" />
+        <CheckBoxPreference
             android:defaultValue="@string/default_vibrate"
             android:key="@string/pref_vibrate_key"
             android:summary="@string/server_vibrate"

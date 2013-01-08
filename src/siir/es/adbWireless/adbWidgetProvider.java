@@ -50,9 +50,9 @@ public class adbWidgetProvider extends AppWidgetProvider {
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 			views.setOnClickPendingIntent(R.id.widgetButton, pendingIntent);
 			if (adbWireless.mState) {
-				views.setImageViewResource(R.id.widgetButton, R.drawable.widgetoff);
-			} else {
 				views.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
+			} else {
+				views.setImageViewResource(R.id.widgetButton, R.drawable.widget);
 			}
 			appWidgetManager.updateAppWidget(appWidgetId, views);
 		}
@@ -94,12 +94,12 @@ public class adbWidgetProvider extends AppWidgetProvider {
 
 			try {
 				if (adbWireless.mState) {
-					views.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
+					views.setImageViewResource(R.id.widgetButton, R.drawable.widget);
 					ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
 					AppWidgetManager.getInstance(context).updateAppWidget(cn, views);
 					Utils.adbStop(context);
 				} else {
-					views.setImageViewResource(R.id.widgetButton, R.drawable.widgetoff);
+					views.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
 					ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
 					AppWidgetManager.getInstance(context).updateAppWidget(cn, views);
 					Toast.makeText(context, context.getString(R.string.widget_start) + " " + Utils.getWifiIp(context), Toast.LENGTH_LONG).show();

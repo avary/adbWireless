@@ -35,12 +35,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 public class Utils {
 
 	public static NotificationManager mNotificationManager;
+	public static WakeLock mWakeLock;
 
 	public static final int START_NOTIFICATION_ID = 1;
 	public static final int ACTIVITY_SETTINGS = 2;
@@ -71,6 +74,7 @@ public class Utils {
 		builder.show();
 	}
 
+	@SuppressWarnings("deprecation")
 	public static boolean adbStart(Context context) {
 		try {
 			if (!adbWireless.USB_DEBUG) {
@@ -92,7 +96,7 @@ public class Utils {
 			editor.putBoolean("mState", true);
 			editor.commit();
 
-			adbWireless.remoteViews.setImageViewResource(R.id.widgetButton, R.drawable.widgetoff);
+			adbWireless.remoteViews.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
 			ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
 			AppWidgetManager.getInstance(context).updateAppWidget(cn, adbWireless.remoteViews);
 
@@ -100,6 +104,13 @@ public class Utils {
 			if (Utils.prefsAutoCon(context)) {
 				Utils.autoConnect(context, "c");
 			}
+			
+			// Wake Lock
+			if (Utils.prefsScreenOn(context)) {
+                final PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+                mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, context.getClass().getName());
+                mWakeLock.acquire();
+            }
 
 			if (Utils.prefsNoti(context)) {
 				Utils.showNotification(context, R.drawable.ic_stat_adbwireless, context.getString(R.string.noti_text) + " " + Utils.getWifiIp(context));
@@ -126,13 +137,18 @@ public class Utils {
 			editor.putBoolean("mState", false);
 			editor.commit();
 
-			adbWireless.remoteViews.setImageViewResource(R.id.widgetButton, R.drawable.widgeton);
+			adbWireless.remoteViews.setImageViewResource(R.id.widgetButton, R.drawable.widget);
 			ComponentName cn = new ComponentName(context, adbWidgetProvider.class);
 			AppWidgetManager.getInstance(context).updateAppWidget(cn, adbWireless.remoteViews);
 
 			// Try to auto disconnect
 			if (Utils.prefsAutoCon(context)) {
 				Utils.autoConnect(context, "d");
+			}
+			
+			// Wake Lock
+			if(mWakeLock != null) {
+				mWakeLock.release();
 			}
 
 			if (Utils.mNotificationManager != null) {
@@ -340,7 +356,12 @@ public class Utils {
 
 	public static String prefsAutoConPort(Context context) {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		return pref.getString(context.getResources().getString(R.string.pref_autoconport_key), "");
+		return pref.getString(context.getResources().getString(R.string.pref_autoconport_key), "8555");
+	}
+
+	public static boolean prefsScreenOn(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getBoolean(context.getResources().getString(R.string.pref_screenon_key), false);
 	}
 
 }

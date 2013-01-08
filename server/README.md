@@ -26,7 +26,10 @@ The default port is `8555`
 
 Edit the file "install-service.bat" can change these values
 
-Start the service `net start adbWirelessService`
+Start the service `net start adbWirelessService` as **administrator** or `Run (Win+R) -> services.msc -> ...`
+
+If you have problems you can run the service from the command line and see the debug:
+`adbWirelessService.exe //TS/adbWirelessService`
 
 
 Automatic connection
