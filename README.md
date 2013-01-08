@@ -1,10 +1,16 @@
 adbWireless
 ----------
-adbWireless enable `ADB` wireless connection to connect to the phone as if connected by USB.
+adbWireless enable [ADB](http://developer.android.com/tools/help/adb.html) wireless connection to connect to the phone as if connected by USB.
 
 This App is for developers, if you don't know that it serves don't install!
 
-`Rooted Phone Only!`
+**Rooted Phone Only!**
+
+<p align="center">
+  <img src="https://raw.github.com/MrSiir/adbWireless/master/zwork/home_off_en.png" width="240" height="427" alt=""/>
+  &nbsp;&nbsp;
+  <img src="https://raw.github.com/MrSiir/adbWireless/master/zwork/home_on_en.png" width="240" height="427" alt=""/>
+</p>
 
 Versions
 ----------
@@ -13,7 +19,7 @@ Versions
  * Added option: Screen always on (be careful with battery consumption)
  
 * **1.5.3**
- * Added option for `Auto connect` to computer, see [adbWireless Service](https://github.com/MrSiir/adbWireless#adbwireless-service)
+ * Added option for `Auto connect` to computer, see [adbWireless Service](https://github.com/MrSiir/adbWireless/tree/master/server)
 
 * **1.5.2**
  * Bug fixed, pressing the back button sometimes the message does not disappear ever (Thanks to Sullivan by notify)

@@ -31,6 +31,8 @@ Start the service `net start adbWirelessService` as **administrator** or `Run (W
 If you have problems you can run the service from the command line and see the debug:
 `adbWirelessService.exe //TS/adbWirelessService`
 
+![adbWirelessService debug](https://raw.github.com/MrSiir/adbWireless/master/zwork/adbWirelessServiceDebug.jpg)
+
 
 Automatic connection
 ----------
